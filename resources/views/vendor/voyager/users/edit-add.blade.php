@@ -27,9 +27,10 @@ $add = is_null($dataTypeContent->getKey());
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
-                    <form role="form" class="form-edit-add"
+                    <form autocomplete="off" role="form" class="form-edit-add"
                         action="{{ $edit ? route('voyager.' . $dataType->slug . '.update', $dataTypeContent->getKey()) : route('voyager.' . $dataType->slug . '.store') }}"
-                        method="POST" enctype="multipart/form-data">
+                        method="POST" enctype="multipart/form-data" >
+                        <input autocomplete="false" name="hidden" type="text" style="display:none;">
                         <!-- PUT Method if we are editing -->
                         @if ($edit)
                             {{ method_field('PUT') }}
@@ -46,58 +47,71 @@ $add = is_null($dataTypeContent->getKey());
                                 </label>
                                 <input type="text" name="name" id="name" class="form-control"
                                     id="validationCustom01" required
-                                    value="{{ $edit ? \App\Models\User::find($dataTypeContent->getKey())->name : '' }}" />
+                                    value="{{ $edit ? \App\Models\User::find($dataTypeContent->getKey())->name : '' }}"
+                                    autocomplete="false" />
                             </div>
+
 
                             <div class="col-md-6">
                                 <label for="validationCustom01">
-                                    الايميل
+                                    الفرع
                                 </label>
-                                <input type="email" name="email" id="email" class="form-control"
-                                    id="validationCustom01"
-                                    value="{{ $edit ? \App\Models\User::find($dataTypeContent->getKey())->email : '' }}"
-                                    autocomplete="off" />
+                                <select type="select" name="branch_id" id="branch_id" class="form-control">
+                                    <option>-إختر-</option>
+                                    @foreach (\App\Models\Branch::where('company_id', Auth::user()->company_id)->get() as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ $edit && $dataTypeContent->branch_id == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }} </option>
+                                    @endforeach
+                                </select>
+
+
                             </div>
-
-
                             <div class="col-md-6">
                                 <label for="validationCustom01">
                                     كلمة السر
                                 </label>
                                 <input type="password" name="password" id="password" class="form-control"
-                                    id="validationCustom01" {{ $add ? 'required' : '' }} />
+                                    id="validationCustom01" {{ $add ? 'required' : '' }}  autocomplete="new-password" />
                             </div>
 
 
                             <div class="col-md-6">
                                 <label for="validationCustom01">
-                                    رقم الهاتف
+                                    الرقم الوظيفي
                                 </label>
-                                <input type="text" name="phone_no" id="phone_no" class="form-control"
+                                <input type="text" name="job_number" id="job_number" class="form-control"
                                     id="validationCustom01"
-                                    value="{{ $edit ? \App\Models\User::find($dataTypeContent->getKey())->phone_no : '' }}" />
+                                    value="{{ $edit ? \App\Models\User::find($dataTypeContent->getKey())->job_number : '' }}" />
                             </div>
 
 
-
                             @if ($edit && $dataTypeContent->role_id == 3)
+                                <div class="col-md-6">
+                                    <label for="validationCustom01">
+                                        رقم الهاتف
+                                    </label>
+                                    <input type="text" name="phone_no" id="phone_no" class="form-control"
+                                        id="validationCustom01"
+                                        value="{{ $edit ? \App\Models\User::find($dataTypeContent->getKey())->phone_no : '' }}" />
+                                </div>
 
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01">
-                                        الفرع
+                                        الايميل
                                     </label>
-                                    <select type="select" name="branch_id" id="branch_id" class="form-control">
-                                        <option>-إختر-</option>
-                                        @foreach (\App\Models\Branch::where('company_id', Auth::user()->company_id)->get() as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $edit && $dataTypeContent->branch_id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->name }} </option>
-                                        @endforeach
-                                    </select>
-
-
+                                    <input type="email" name="email" id="email" class="form-control"
+                                        id="validationCustom01"
+                                        value="{{ $edit ? \App\Models\User::find($dataTypeContent->getKey())->email : '' }}"
+                                        autocomplete="off" />
                                 </div>
+
+
+
+
+
+
 
 
                                 <div class="col-md-6">
@@ -152,12 +166,12 @@ $add = is_null($dataTypeContent->getKey());
                                 </div>
 
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="validationCustom01">
                                         رقم الهوية
                                     </label>
-                                    <input type="text" name="identity_number" id="identity_number" class="form-control"
-                                        id="validationCustom01"
+                                    <input type="text" name="identity_number" id="identity_number"
+                                        class="form-control" id="validationCustom01"
                                         value="{{ $edit ? $dataTypeContent->identity_number : '' }}" />
                                 </div>
                                 <div class="col-md-4">
@@ -170,14 +184,6 @@ $add = is_null($dataTypeContent->getKey());
                                 </div>
 
 
-
-                                <div class="col-md-4">
-                                    <label for="validationCustom01">
-                                        صورة الهوية
-                                    </label>
-                                    <input type="file" name="id_image" id="id_image" class="form-control"
-                                        id="validationCustom01" value="{{ $edit ? $dataTypeContent->id_image : '' }}" />
-                                </div>
 
 
 
@@ -212,6 +218,16 @@ $add = is_null($dataTypeContent->getKey());
                                         value="{{ $edit ? $dataTypeContent->licence_image : '' }}" />
                                 </div>
 
+                                
+                                <div class="col-md-4">
+                                    <label for="validationCustom01">
+                                        صورة الهوية
+                                    </label>
+                                    <input type="file" name="id_image" id="id_image" class="form-control"
+                                        id="validationCustom01" value="{{ $edit ? $dataTypeContent->id_image : '' }}" />
+                                </div>
+
+
                                 <div class="col-md-12"
                                     style="padding: 20px; border: 1px solid #d1cccc;  margin-top: 20px; border-radius: 20px;">
                                     <div class="col-md-4">
@@ -226,7 +242,8 @@ $add = is_null($dataTypeContent->getKey());
                                         <label for="validationCustom01">
                                             عدم تتبع الحضور؟
                                         </label>
-                                        <input type="checkbox" name="no_attendance_tracking" id="no_attendance_tracking" id="validationCustom01"
+                                        <input type="checkbox" name="no_attendance_tracking" id="no_attendance_tracking"
+                                            id="validationCustom01"
                                             {{ $dataTypeContent->no_attendance_tracking == 1 ? 'checked' : '' }} />
                                     </div>
 
@@ -234,12 +251,12 @@ $add = is_null($dataTypeContent->getKey());
                                         <label for="validationCustom01">
                                             عدم تتبع البصمة؟
                                         </label>
-                                        <input type="checkbox" name="no_fingerprint_tracking" id="no_fingerprint_tracking" id="validationCustom01"
+                                        <input type="checkbox" name="no_fingerprint_tracking"
+                                            id="no_fingerprint_tracking" id="validationCustom01"
                                             {{ $dataTypeContent->no_fingerprint_tracking == 1 ? 'checked' : '' }} />
                                     </div>
 
                                 </div>
-
                             @endif
 
 

@@ -47,13 +47,20 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
     @include('voyager::multilingual.language-selector')
 @stop
 
+
+
 @section('content')
+
+
+
+
     <div class="page-content edit-add container-fluid">
 
         <div style="box-shadow: none;border: 1px solid #1865a0;
         border-radius: 20px; "class="row">
 
-            <div style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"class="col-md-3 col-sm-3">
+            <div
+                style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"class="col-md-3 col-sm-3 col-xs-3">
                 <p>{{ $companyData->name }}</p>
                 <p>
                     فرع:
@@ -65,13 +72,14 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                     {{ $branch->fax }}</p>
             </div>
 
-            <div style="box-shadow: none; text-align: center;"class="col-md-6 col-sm-6">
+            <div style="box-shadow: none; text-align: center;"class="col-md-6 col-sm-6 col-xs-6">
 
                 <img style="margin-top: 15px;" width="155px" height="155px"
                     src="{{ url('/') . '/storage/' . $companyData->avatar }}" alt="">
             </div>
 
-            <div style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3">
+            <div
+                style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3 col-xs-3">
                 <p>{{ $companyData->english_name }}</p>
                 <p>Branch: {{ $branch->english_name }}</p>
                 <p>Phone: {{ $branch->phone_number }}</p>
@@ -79,7 +87,7 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
             </div>
         </div>
         <div style="text-align: center;">
-          
+
 
             <h3 class="page-title">
                 تقرير الحضور الموظفين
@@ -98,18 +106,17 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                     <form class="form-inline form-filter no-print" method="GET"
                         action="<?php echo url('/'); ?>/admin/employees-report">
 
-                        {{-- <div class="form-group">
+                        <div class="form-group">
                             <label for="status">
-                               الموظف
+                                الفرع
                                 :</label>
-                            <select class="form-control" name="emp_id" id="emp_id">
-                                <option value="">-إختر-</option>
-                                @foreach (\App\Models\User::where('role_id', 2)->get() as $item)
+                            <select class="form-control" name="branch_id" id="branch_id">
+                                <option value="">-الكل-</option>
+                                @foreach (\App\Models\Branch::where('company_id', Auth::user()->company_id)->get() as $item)
                                     <option value="{{ $item->id }}"> {{ $item->name }} </option>
                                 @endforeach
-
                             </select>
-                        </div> --}}
+                        </div>
 
 
 
@@ -166,7 +173,27 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                                     </td>
 
                                     <td>
-                                        {{ date('l', strtotime($item['date'])) }}
+                                     
+
+                                        @php
+                                                 $day = null;
+                                             if (date('l', strtotime($item['date'])) == 'Monday') {
+                                                 $day = 'الإثنين';
+                                             } elseif (date('l', strtotime($item['date'])) == 'Tuesday') {
+                                                 $day = 'الثلاثاء';
+                                             } elseif (date('l', strtotime($item['date'])) == 'Wednesday') {
+                                                 $day = 'الاربعاء';
+                                             } elseif (date('l', strtotime($item['date'])) == 'Thursday') {
+                                                 $day = 'الخميس';
+                                             } elseif (date('l', strtotime($item['date'])) == 'Friday') {
+                                                 $day = 'الجمعة';
+                                             } elseif (date('l', strtotime($item['date'])) == 'Saturday') {
+                                                 $day = 'السبت';
+                                             } elseif (date('l', strtotime($item['date'])) == 'Sunday') {
+                                                 $day = 'الأحد';
+                                             }
+                                             echo $day;
+                                        @endphp
                                     </td>
 
                                     {{-- <td> --}}
@@ -196,11 +223,11 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                                         @php
                                             
                                             /*  if (count($item['attendance']) > 0) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        $time1 = new DateTime($item['attendance'][$item['date']][0]->attendance_time);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        $time2 = new DateTime($item['attendance'][$item['date']][1]->attendance_time);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        $interval = $time1->diff($time2);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        echo date('H:i:s', strtotime($interval->h . ':' . $interval->i));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }  */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            $time1 = new DateTime($item['attendance'][$item['date']][0]->attendance_time);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            $time2 = new DateTime($item['attendance'][$item['date']][1]->attendance_time);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            $interval = $time1->diff($time2);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            echo date('H:i:s', strtotime($interval->h . ':' . $interval->i));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }  */
                                         @endphp
                                     </td>
 

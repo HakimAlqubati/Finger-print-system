@@ -43,7 +43,8 @@ class User extends \TCG\Voyager\Models\User
         'licence_expiration_date',
         'no_attendance_tracking',
         'active',
-        'no_fingerprint_tracking'
+        'no_fingerprint_tracking',
+        'job_number'
     ];
 
     /**

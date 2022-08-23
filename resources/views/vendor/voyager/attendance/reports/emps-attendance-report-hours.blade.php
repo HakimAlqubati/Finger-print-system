@@ -52,7 +52,7 @@
          <div style="box-shadow: none;border: 1px solid #1865a0;
         border-radius: 20px; "class="row">
 
-             <div style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"class="col-md-3 col-sm-3">
+             <div style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"class="col-md-3 col-sm-3 col-xs-3">
                  <p>{{ $companyData->name }}</p>
                  <p>
                      فرع:
@@ -64,13 +64,11 @@
                      {{ $branch->fax }}</p>
              </div>
 
-             <div style="box-shadow: none; text-align: center;"class="col-md-6 col-sm-6">
-
+             <div style="box-shadow: none; text-align: center;"class="col-md-6 col-sm-6 col-xs-6">
                  <img style="margin-top: 15px;" width="155px" height="155px"
                      src="{{ url('/') . '/storage/' . $companyData->avatar }}" alt="">
              </div>
-
-             <div style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3">
+             <div style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3 col-xs-3">
                  <p>{{ $companyData->english_name }}</p>
                  <p>Branch: {{ $branch->english_name }}</p>
                  <p>Phone: {{ $branch->phone_number }}</p>
@@ -93,6 +91,18 @@
 
                      <form class="form-inline form-filter no-print" method="GET"
                          action="<?php echo url('/'); ?>/admin/employees-report-hours">
+
+                         <div class="form-group">
+                             <label for="status">
+                                 الفرع
+                                 :</label>
+                             <select class="form-control" name="branch_id" id="branch_id">
+                                 <option value="">-الكل-</option>
+                                 @foreach (\App\Models\Branch::where('company_id', Auth::user()->company_id)->get() as $item)
+                                     <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                                 @endforeach
+                             </select>
+                         </div>
 
 
                          <div class="form-group">

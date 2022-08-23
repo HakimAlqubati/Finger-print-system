@@ -354,7 +354,7 @@ class UserController extends VoyagerBaseController
             Storage::disk('local')->put('public/users/licences' . '/' . $fileName, $img, 'public');
             $licenceImageName = 'users/licences/'  . $fileName;
         }
- 
+
 
         if ($request->active == "on") {
             $active = 1;
@@ -374,7 +374,7 @@ class UserController extends VoyagerBaseController
             $no_attendance_tracking = 0;
         }
 
-      
+
         $user = User::find($id)->update(
             [
                 'name' => $request->name,
@@ -394,11 +394,12 @@ class UserController extends VoyagerBaseController
                 'id_expiration_date' => $request->id_expiration_date,
                 'licence_expiration_date' => $request->licence_expiration_date,
                 'licence_number' => $request->licence_number,
-                'id_image' => isset($idImageName) ? $idImageName : '',
-                'licence_image' => isset($licenceImageName) ? $licenceImageName : '',
+                'id_image' => isset($idImageName) ? $idImageName : User::find($id)->id_image,
+                'licence_image' => isset($licenceImageName) ? $licenceImageName : User::find($id)->licence_image,
                 'active' => $active,
                 'no_attendance_tracking' => $no_attendance_tracking,
-                'no_fingerprint_tracking' => $no_fingerprint_tracking
+                'no_fingerprint_tracking' => $no_fingerprint_tracking,
+                'job_number' => $request->job_number,
 
             ]
         );
@@ -571,6 +572,8 @@ class UserController extends VoyagerBaseController
                 'licence_expiration_date' => $request->licence_expiration_date,
                 'id_image' => $idImageName,
                 'licence_image' => $licenceImageName,
+                'job_number' => $request->job_number,
+                'active' => 0
 
             ]
         );

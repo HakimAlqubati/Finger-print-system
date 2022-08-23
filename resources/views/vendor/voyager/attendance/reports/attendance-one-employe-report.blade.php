@@ -60,7 +60,8 @@
          <div style="box-shadow: none;border: 1px solid #1865a0;
          border-radius: 20px;"class="row">
 
-             <div style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"class="col-md-3 col-sm-3">
+             <div style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"
+                 class="col-md-3 col-sm-3 col-xs-3">
                  <p>{{ $companyData->name }}</p>
                  <p>
                      فرع:
@@ -72,13 +73,14 @@
                      {{ $branch->fax }}</p>
              </div>
 
-             <div style="box-shadow: none; text-align: center;"class="col-md-6 col-sm-6">
+             <div style="box-shadow: none; text-align: center;"class="col-md-6 col-sm-6 col-xs-6">
 
                  <img style="margin-top: 15px;" width="155px" height="155px"
                      src="{{ url('/') . '/storage/' . $companyData->avatar }}" alt="">
              </div>
 
-             <div style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3">
+             <div
+                 style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3 col-xs-3">
                  <p>{{ $companyData->english_name }}</p>
                  <p>Branch: {{ $branch->english_name }}</p>
                  <p>Phone: {{ $branch->phone_number }}</p>
@@ -158,7 +160,27 @@
                                  <tr>
                                      <td>{{ $loop->iteration }}</td>
 
-                                     <td> {{ date('l', strtotime($item[0]->attendance_date)) }} </td>
+                                     <td>
+                                         @php
+                                             $day = null;
+                                             if (date('l', strtotime($item[0]->attendance_date)) == 'Monday') {
+                                                 $day = 'الإثنين';
+                                             } elseif (date('l', strtotime($item[0]->attendance_date)) == 'Tuesday') {
+                                                 $day = 'الثلاثاء';
+                                             } elseif (date('l', strtotime($item[0]->attendance_date)) == 'Wednesday') {
+                                                 $day = 'الاربعاء';
+                                             } elseif (date('l', strtotime($item[0]->attendance_date)) == 'Thursday') {
+                                                 $day = 'الخميس';
+                                             } elseif (date('l', strtotime($item[0]->attendance_date)) == 'Friday') {
+                                                 $day = 'الجمعة';
+                                             } elseif (date('l', strtotime($item[0]->attendance_date)) == 'Saturday') {
+                                                 $day = 'السبت';
+                                             } elseif (date('l', strtotime($item[0]->attendance_date)) == 'Sunday') {
+                                                 $day = 'الأحد';
+                                             }
+                                             echo $day;
+                                         @endphp
+                                     </td>
                                      <td> {{ $item[0]->attendance_date }} </td>
 
                                      <td> {{ $item[0]->attendance_time }} </td>

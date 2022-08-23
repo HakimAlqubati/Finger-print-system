@@ -121,7 +121,14 @@ class AttendanceController extends VoyagerBaseController
     public function allEmployeesReport(Request $request)
     {
 
-        $employees = User::where('role_id', 3)->get();
+        // $employees = User::where('role_id', 3)->get();
+
+        $employees = User::where('role_id', 3);
+        if (isset($request->branch_id) && $request->branch_id != null) {
+            $employees =    $employees->where('branch_id', $request->branch_id);
+        }
+        $employees =  $employees->get();
+
         $date = null;
         if (isset($request->date) && $request->date != null) {
             $date = $request->date;
@@ -256,7 +263,11 @@ class AttendanceController extends VoyagerBaseController
     public function reportEmps(Request $request)
     {
 
-        $employees = User::where('role_id', 3)->get();
+        $employees = User::where('role_id', 3);
+        if (isset($request->branch_id) && $request->branch_id != null) {
+            $employees =    $employees->where('branch_id', $request->branch_id);
+        }
+        $employees =  $employees->get();
         $result = [];
 
 
@@ -366,7 +377,12 @@ class AttendanceController extends VoyagerBaseController
             $monthName = 'ديسمبر';
         }
 
-        $employees = User::where('role_id', 3)->get();
+        $employees = User::where('role_id', 3);
+        if (isset($request->branch_id) && $request->branch_id != null) {
+            $employees =    $employees->where('branch_id', $request->branch_id);
+        }
+        $employees =  $employees->get();
+        
 
         $result = [];
         foreach ($employees as $key => $value) {

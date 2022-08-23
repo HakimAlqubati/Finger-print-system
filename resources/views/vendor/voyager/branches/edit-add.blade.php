@@ -76,9 +76,9 @@ $add = is_null($dataTypeContent->getKey());
 
                         <div class="col-md-12">
                             <label for="validationCustom01">
-                                الوصف
+                                العنوان
                             </label>
-                            <textarea type="text" name="description" class="form-control" id="validationCustom01" placeholder="الوصف">{{ $edit ? \App\Models\Branch::find($dataTypeContent->getKey())->description : '' }}</textarea>
+                            <textarea type="text" name="description" class="form-control" id="validationCustom01" placeholder="العنوان">{{ $edit ? \App\Models\Branch::find($dataTypeContent->getKey())->description : '' }}</textarea>
 
 
                         </div>

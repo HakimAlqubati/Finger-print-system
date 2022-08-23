@@ -20,7 +20,7 @@ class AuthController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'phone_no' => 'required|string|max:255',
+            'job_number' => 'required|string|max:255',
             'password' => 'required|string',
         ]);
 
@@ -28,7 +28,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
         }
-        $user = User::where('phone_no', $request->phone_no)->first();
+        $user = User::where('job_number', $request->job_number)->first();
 
         if ($user) {
             if (Hash::check($request->password, $user->password)) {

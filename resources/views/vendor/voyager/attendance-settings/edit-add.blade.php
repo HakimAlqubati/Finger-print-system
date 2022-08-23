@@ -41,17 +41,27 @@ $add = is_null($dataTypeContent->getKey());
                         <div class="panel-body">
 
                             <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}">
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="name"> العنوان </label>
                                 <input type="text" name="title" placeholder="العنوان" class="form-control" required
                                     value="{{ $edit ? $dataTypeContent->title : '' }}">
-                            </div>
-
-
-                            {{-- <div class="form-group" >
-                                <label for="name"> كود QR </label>
-                                <input type="text" name="qr_code" placeholder="QR كود" class="form-control" value="<?php echo 'random_str'; ?>">
                             </div> --}}
+
+                            <div class="form-group">
+                                <label for="name"> الفرع </label>
+                                <select type="text" name="branch_id" class="form-control">
+
+                                    <option value="">-إختر-</option>
+
+
+                                    @foreach (\App\Models\Branch::where('company_id', Auth::user()->company_id)->get() as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ $edit && $dataTypeContent->branch_id == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div> 
 
 
                             <div class="form-group">
@@ -75,23 +85,9 @@ $add = is_null($dataTypeContent->getKey());
                                     value="{{ $edit ? $dataTypeContent->ford_location : '' }}">
                             </div>
 
-                        
-
-                            <div class="form-group">
-                                <label for="name"> الفرع </label>
-                                <select type="text" name="branch_id" class="form-control">
-
-                                    <option value="">-إختر-</option>
 
 
-                                    @foreach (\App\Models\Branch::where('company_id', Auth::user()->company_id)->get() as $item)
-                                        <option value="{{ $item->id }}"
-                                            {{ $edit && $dataTypeContent->branch_id == $item->id ? 'selected' : '' }}>
-                                            {{ $item->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+
 
 
                             @if ($edit)
