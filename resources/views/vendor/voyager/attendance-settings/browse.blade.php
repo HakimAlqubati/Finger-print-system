@@ -110,7 +110,7 @@
                                             </th>
                                         @endforeach
                                         <th>
-
+                                            رمز الإستجابة السريعة
                                         </th>
                                         <th class="actions text-right dt-not-orderable">
                                             {{ __('voyager::generic.actions') }}</th>
@@ -286,7 +286,8 @@
                                             <td>
                                                 <a href="{{ url('/admin/print-barcode/' . $data->getKey()) }}"
                                                     class="btn btn-success">
-                                                    <i class="voyager-file-text"></i> <span>طباعة الباركود</span>
+                                                    <i class="voyager-file-text"></i> <span>طباعة رمز الإستجابة
+                                                        السريعة</span>
                                                 </a>
                                             </td>
                                             <td class="no-sort no-click bread-actions">
@@ -421,11 +422,11 @@
                     if ($(this).prop('checked')) {
                         $('#dataTable').before(
                             '<a id="redir" href="{{ route('voyager.' . $dataType->slug . '.index', array_merge($params, ['showSoftDeleted' => 1]), true) }}"></a>'
-                            );
+                        );
                     } else {
                         $('#dataTable').before(
                             '<a id="redir" href="{{ route('voyager.' . $dataType->slug . '.index', array_merge($params, ['showSoftDeleted' => 0]), true) }}"></a>'
-                            );
+                        );
                     }
 
                     $('#redir')[0].click();

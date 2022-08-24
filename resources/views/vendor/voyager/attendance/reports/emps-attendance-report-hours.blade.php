@@ -22,11 +22,6 @@
                  display: none !important;
              }
 
-             .table-bordered {
-                 width: 100%;
-                 color: red;
-                 background: red;
-             }
 
              [dir="rtl"] .app-container.expanded .side-body {
                  margin-right: 0px !important;
@@ -49,10 +44,11 @@
  @section('content')
      <div class="page-content edit-add container-fluid">
 
-         <div style="box-shadow: none;border: 1px solid #1865a0;
+         <div style="box-shadow: none;border: 1px solid #38393a;
         border-radius: 20px; "class="row">
 
-             <div style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"class="col-md-3 col-sm-3 col-xs-3">
+             <div
+                 style="box-shadow: none;text-align: right; padding-top: 20px;padding-right: 30px;"class="col-md-3 col-sm-3 col-xs-3">
                  <p>{{ $companyData->name }}</p>
                  <p>
                      فرع:
@@ -68,7 +64,8 @@
                  <img style="margin-top: 15px;" width="155px" height="155px"
                      src="{{ url('/') . '/storage/' . $companyData->avatar }}" alt="">
              </div>
-             <div style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3 col-xs-3">
+             <div
+                 style="box-shadow: none; padding-top: 20px;text-align: left;padding-left: 30px;"class="col-md-3 col-sm-3 col-xs-3">
                  <p>{{ $companyData->english_name }}</p>
                  <p>Branch: {{ $branch->english_name }}</p>
                  <p>Phone: {{ $branch->phone_number }}</p>
@@ -84,7 +81,7 @@
              </h3>
          </div>
          <div class="row">
-             <div class="col-md-12">
+             <div class="col-md-12" style="padding: 0px !important;">
 
                  <div class="panel panel-bordered">
 

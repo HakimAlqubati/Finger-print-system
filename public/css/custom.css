@@ -1,0 +1,71 @@
+ [dir="rtl"] .app-container .content-container .navbar-top,
+ [dir="rtl"] .app-container .side-body,
+ [dir="rtl"] .app-container.expanded .content-container .navbar-top {
+     height: 60px;
+     background: #4276a4;
+ }
+
+ @media print {
+     [dir="rtl"] .app-container .content-container .side-menu {
+         display: none;
+     }
+ }
+
+ [dir="rtl"] .app-container .content-container .side-menu {
+     right: 0;
+     background: #4276a4 !important;
+ }
+
+ .voyager .side-menu.sidebar-inverse .navbar li>a {
+     color: white;
+ }
+
+ .hamburger.is-active.no-animation .hamburger-inner,
+ .hamburger.is-active.no-animation .hamburger-inner:after,
+ .hamburger.is-active.no-animation .hamburger-inner:before {
+     transition: none;
+     width: 20px;
+     background: white;
+ }
+
+ .hamburger-inner:after,
+ .hamburger-inner:before {
+     background-color: white !important;
+ }
+
+ .hamburger-inner {
+     background-color: white !important;
+ }
+
+
+ .voyager .table>thead>tr>th {
+     background: #4276a4;
+     color: white;
+ }
+
+ .active>a,
+ .voyager .pagination .active>a:focus,
+ .voyager .pagination .active>a:hover,
+ .voyager .pagination .active>span:focus,
+ .voyager .pagination .active>span:hover,
+ .voyager .pagination .active span {
+     background-color: #4276a4 !important;
+     color: white !important;
+ }
+
+ body {
+     font-weight: bold !important;
+ }
+
+ .table>caption+thead>tr:first-child>td,
+ .table>caption+thead>tr:first-child>th,
+ .table>colgroup+thead>tr:first-child>td,
+ .table>colgroup+thead>tr:first-child>th,
+ .table>thead:first-child>tr:first-child>td,
+ .table>thead:first-child>tr:first-child>th {
+    text-align: center !important;
+ }
+
+ [dir="rtl"] .table.dataTable tbody td, table.dataTable tbody th{
+    text-align: center !important;
+ }

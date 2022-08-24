@@ -42,7 +42,7 @@
 
          <div class="col-md-12" style="box-shadow: none;">
              <h5 style="text-align: center;">
-                 امسح الباركود لتأكيد حضورك
+                 امسح كود الاستجابة السريعة لتأكيد حضورك
                  في
                  (
                  {{ $branch->name }}
