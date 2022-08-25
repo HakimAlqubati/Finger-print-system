@@ -3,7 +3,7 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    
+
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href={{ url('/') . '/multiselect/css/style_custom.css' }}>
@@ -15,7 +15,7 @@
 
 @section('page_header')
     <h1 class="page-title">
-      إرسال إشعارات
+        إرسال إشعارات
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -56,7 +56,8 @@
                                 <div class="form-group" style="width: 100%">
                                     <label for="exampleInputEmail1">العنوان</label>
                                     <br>
-                                    <input type="text" style="width: 100%;" class="form-control" name="title" placeholder="عنوان الإشعار" />
+                                    <input type="text" style="width: 100%;" class="form-control" name="title"
+                                        placeholder="عنوان الإشعار" />
                                 </div>
                             </div>
 
@@ -169,10 +170,13 @@
                 var stateTemplate = _.template(
 
 
-                    "<li>" +
 
-                    '<label class="checkbox-wrap"><input id="userid" name="users[]" value="<%= abbreviation %>" type="checkbox"> <span for="<%= abbreviation %>"><%= capName %></span> <span class="checkmark"></span></label>' +
-                    // '<label for="<%= abbreviation %>"><%= capName %></label>' +
+                    // "<li>" +
+                    // '<label class="checkbox-wrap"><input id="colorsid" name="users[]" value="<%= abbreviation %>" type="checkbox"> <span for="<%= abbreviation %>"><%= name %></span> <span class="checkmark"></span></label>' +
+                    // "</li>"
+
+                    "<li>" +
+                    '<label class="checkbox-wrap"><input id="colorsid" name="users[]" value="<%= abbreviation %>" type="checkbox"> <span for="<%= abbreviation %>"><%= name %></span> <span class="checkmark"></span></label>' +
                     "</li>"
                 );
 

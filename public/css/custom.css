@@ -63,9 +63,32 @@
  .table>colgroup+thead>tr:first-child>th,
  .table>thead:first-child>tr:first-child>td,
  .table>thead:first-child>tr:first-child>th {
-    text-align: center !important;
+     text-align: center !important;
  }
 
- [dir="rtl"] .table.dataTable tbody td, table.dataTable tbody th{
-    text-align: center !important;
+ [dir="rtl"] .table.dataTable tbody td,
+ table.dataTable tbody th {
+     text-align: center !important;
+ }
+
+ @media print {
+     .app-container .content-container .side-body.padding-top {
+         padding-top: 14px;
+         padding-right: 0px;
+         margin-right: 0px;
+     }
+
+
+
+ }
+
+ .page-content .col-xs-3 p {
+
+     margin-bottom: 0px;
+ }
+
+ .page-content .col-xs-6,
+ .page-content .col-sm-6,
+ .page-content .col-md-6 {
+     margin-bottom: 0px !important;
  }
