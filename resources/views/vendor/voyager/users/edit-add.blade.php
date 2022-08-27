@@ -240,7 +240,7 @@ $add = is_null($dataTypeContent->getKey());
 
                                     <div class="col-md-4">
                                         <label for="validationCustom01">
-                                            عدم تتبع الحضور؟
+                                            عدم تتبع التأخير؟
                                         </label>
                                         <input type="checkbox" name="no_attendance_tracking" id="no_attendance_tracking"
                                             id="validationCustom01"

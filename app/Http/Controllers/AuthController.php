@@ -141,4 +141,6 @@ class AuthController extends Controller
                 $user;
         }
     }
+
+    
 }

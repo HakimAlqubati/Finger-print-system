@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationControler;
 use App\Http\Controllers\WorkDayController;
 use App\Http\Controllers\WorkDayPeriodController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,9 +22,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+Route::get('/get-test', function () {
+    // return User::whereDoesntHave('attendances')
+    // ->where(function($query){
+    //       $query->
+    // })
+    // ->get();
+
+    return  User::whereDoesntHave('attendances', function ($query) {
+        $query->whereIn('attendances.emp_id', [2, 3]);
+    })->get();
+
+    // return User::whereDoesntHave('attendances')->where('attendances.work_day_id', '=', 'users.id')->get();
+});
+
 Route::post('/upload', [AuthController::class, 'UploadImage']);
-
-
 Route::middleware(['auth:api'])->group(function () {
     Route::post('/update-user', [AuthController::class, 'update']);
 });
