@@ -4,6 +4,7 @@
 use App\Http\Controllers\NotificationControler;
 use App\Http\Controllers\Voyager\AttendanceController;
 use App\Http\Controllers\Voyager\AttendanceSettingsController;
+use App\Http\Controllers\Voyager\VacationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Voyager\VoyagerAuthController;
 use App\Http\Controllers\Voyager\WorkDayController;
@@ -23,8 +24,7 @@ use App\Http\Controllers\Voyager\WorkDayController;
 Route::get('/', function () {
     return view('welcome');
 });
-
-
+ 
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/register', [VoyagerAuthController::class, 'register']);
     Route::get('/report', [AttendanceController::class, 'report']);
@@ -40,6 +40,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/notifications/create', [NotificationControler::class, 'create']);
     Route::get('/topic-notifications/create', [NotificationControler::class, 'topicCreate']);
     Route::get('/print-barcode/{id}', [AttendanceSettingsController::class, 'printBarcode']);
+
+    Route::get('/print-vacation/{id}', [VacationController::class, 'printVacation']);
 
 
     Voyager::routes();

@@ -34,7 +34,8 @@ class Attendance extends Model
         'permissions_hours',
         'overtime_hours',
         'holiday_hours',
-        'avatar'
+        'avatar',
+        'vacation_id'
     ];
 
     public function period()
