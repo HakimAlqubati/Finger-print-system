@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AdvancePaymentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceSettingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationControler;
 use App\Http\Controllers\VacationController;
+use App\Http\Controllers\VacationTypeController;
 use App\Http\Controllers\WorkDayController;
 use App\Http\Controllers\WorkDayPeriodController;
 use App\Models\Attendance;
@@ -152,14 +154,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/work-days', [WorkDayPeriodController::class, 'index']);
 
     Route::resource('work-day', WorkDayController::class);
-
     Route::resource('attendance', AttendanceController::class);
-
     Route::resource('vacation', VacationController::class);
+    Route::resource('vacation-type', VacationTypeController::class);
+    Route::resource('advance-payment', AdvancePaymentController::class);
 
     Route::get('/attendance-last', [AttendanceController::class, 'last']);
-
     Route::get('attendance-settings', [AttendanceSettingController::class, 'index']);
-
     Route::get('/notifications', [NotificationControler::class, 'index']);
 });

@@ -2,8 +2,6 @@
 
 namespace  App\Http\Controllers\Voyager;
 
-use App\Models\Branch;
-use App\Models\Period;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -19,7 +17,7 @@ use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 
-class PeriodController extends VoyagerBaseController
+class AdvancePaymentController extends VoyagerBaseController
 {
     use BreadRelationshipParser;
 
@@ -334,76 +332,52 @@ class PeriodController extends VoyagerBaseController
     {
         $slug = $this->getSlug($request);
 
-
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
+        // Compatibility with Model binding.
+        $id = $id instanceof \Illuminate\Database\Eloquent\Model ? $id->{$id->getKeyName()} : $id;
 
-        $period = Period::find($id)->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'period_type' => $request->period_type,
-            'from_time' => $request->from_time,
-            'to_time' => $request->to_time,
-            'allowed_delay' => $request->allowed_delay,
-            'company_id' => Auth::user()->company_id,
-            'order' => $request->order
-        ]);
-
-        if ($period) {
-            $slug = $this->getSlug($request);
-            $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
-            return $redirect->with([
-                'message'    => __('voyager::generic.successfully_added_new') . " {$dataType->getTranslatedAttribute('display_name_singular')}",
-                'alert-type' => 'success',
-            ]);
+        $model = app($dataType->model_name);
+        $query = $model->query();
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope' . ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
         }
 
+        $data = $query->findOrFail($id);
 
-        // Compatibility with Model binding.
-        // $id = $id instanceof \Illuminate\Database\Eloquent\Model ? $id->{$id->getKeyName()} : $id;
+        // Check permission
+        $this->authorize('edit', $data);
 
-        // $model = app($dataType->model_name);
-        // $query = $model->query();
-        // if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope' . ucfirst($dataType->scope))) {
-        //     $query = $query->{$dataType->scope}();
-        // }
-        // if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
-        //     $query = $query->withTrashed();
-        // }
+        // Validate fields with ajax
+        $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
 
-        // $data = $query->findOrFail($id);
+        // Get fields with images to remove before updating and make a copy of $data
+        $to_remove = $dataType->editRows->where('type', 'image')
+            ->filter(function ($item, $key) use ($request) {
+                return $request->hasFile($item->field);
+            });
+        $original_data = clone ($data);
 
-        // // Check permission
-        // $this->authorize('edit', $data);
+        $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
 
-        // // Validate fields with ajax
-        // $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
+        // Delete Images
+        $this->deleteBreadImages($original_data, $to_remove);
 
-        // // Get fields with images to remove before updating and make a copy of $data
-        // $to_remove = $dataType->editRows->where('type', 'image')
-        //     ->filter(function ($item, $key) use ($request) {
-        //         return $request->hasFile($item->field);
-        //     });
-        // $original_data = clone ($data);
+        event(new BreadDataUpdated($dataType, $data));
 
-        // $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
+        if (auth()->user()->can('browse', app($dataType->model_name))) {
+            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
+        } else {
+            $redirect = redirect()->back();
+        }
 
-        // // Delete Images
-        // $this->deleteBreadImages($original_data, $to_remove);
-
-        // event(new BreadDataUpdated($dataType, $data));
-
-        // if (auth()->user()->can('browse', app($dataType->model_name))) {
-        //     $redirect = redirect()->route("voyager.{$dataType->slug}.index");
-        // } else {
-        //     $redirect = redirect()->back();
-        // }
-
-        // return $redirect->with([
-        //     'message'    => __('voyager::generic.successfully_updated') . " {$dataType->getTranslatedAttribute('display_name_singular')}",
-        //     'alert-type' => 'success',
-        // ]);
+        return $redirect->with([
+            'message'    => __('voyager::generic.successfully_updated') . " {$dataType->getTranslatedAttribute('display_name_singular')}",
+            'alert-type' => 'success',
+        ]);
     }
 
     //***************************************
@@ -421,7 +395,6 @@ class PeriodController extends VoyagerBaseController
 
     public function create(Request $request)
     {
-
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -464,55 +437,33 @@ class PeriodController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
+        $slug = $this->getSlug($request);
 
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
-        $period = Period::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'period_type' => $request->period_type,
-            'from_time' => $request->from_time,
-            'to_time' => $request->to_time,
-            'allowed_delay' => $request->allowed_delay,
-            'company_id' => Auth::user()->company_id,
-            'order' => $request->order
-        ]);
+        // Check permission
+        $this->authorize('add', app($dataType->model_name));
 
-        if ($period) {
-            $slug = $this->getSlug($request);
-            $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
+        // Validate fields with ajax
+        $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
+        $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
+
+        event(new BreadDataAdded($dataType, $data));
+
+        if (!$request->has('_tagging')) {
+            if (auth()->user()->can('browse', $data)) {
+                $redirect = redirect()->route("voyager.{$dataType->slug}.index");
+            } else {
+                $redirect = redirect()->back();
+            }
+
             return $redirect->with([
                 'message'    => __('voyager::generic.successfully_added_new') . " {$dataType->getTranslatedAttribute('display_name_singular')}",
                 'alert-type' => 'success',
             ]);
+        } else {
+            return response()->json(['success' => true, 'data' => $data]);
         }
-        // $slug = $this->getSlug($request);
-
-        // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-
-        // Check permission
-        // $this->authorize('add', app($dataType->model_name));
-
-        // Validate fields with ajax
-        // $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
-        // $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
-
-        // event(new BreadDataAdded($dataType, $data));
-
-        // if (!$request->has('_tagging')) {
-        //     if (auth()->user()->can('browse', $data)) {
-        //         $redirect = redirect()->route("voyager.{$dataType->slug}.index");
-        //     } else {
-        //         $redirect = redirect()->back();
-        //     }
-
-        //     return $redirect->with([
-        //         'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
-        //         'alert-type' => 'success',
-        //     ]);
-        // } else {
-        //     return response()->json(['success' => true, 'data' => $data]);
-        // }
     }
 
     //***************************************

@@ -23,7 +23,8 @@ class Vacation extends Model
         'to_time',
         'status',
         'vacation_reason',
-        'manager_notes'
+        'manager_notes',
+        'period_ids'
     ];
 
     public function user()
@@ -31,10 +32,24 @@ class Vacation extends Model
         return $this->belongsTo(User::class, 'emp_id');
     }
 
+    public function getPeriodIdsExplodedAttribute()
+    {
+        $periods = $this->period_ids;
+
+        $final = [];
+        foreach (explode(',', $periods)  as $key => $value) {
+            $period = Period::find($value);
+            $final[] = [
+                'period_id' => $period->id,
+                'period_name' => $period->name,
+                'period_from_time' => $period->from_time,
+                'period_to_time' => $period->to_time
+            ];
+        }
+        return $final;
+    }
     public function vacationType()
     {
         return $this->belongsTo(VacationType::class, 'type');
     }
-
-
 }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VacationResource extends JsonResource
+class AdvancePaymentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,15 +18,9 @@ class VacationResource extends JsonResource
             'id' => $this->id,
             'emp_id' => $this->emp_id,
             'emp_name' => $this->user->name,
-            'date' => $this->date,
-            'type' => $this->type,
-            'no_of_days' => $this->no_of_days,
-            'period_ids' => $this->period_ids_exploded,
-            // 'from_time' => $this->from_time,
-            // 'to_time' => $this->to_time,
-            'status' => $this->status,
-            'vacation_reason' => $this->vacation_reason,
-            'manager_notes' => $this->manager_notes,
+            'amount' => $this->amount,
+            'reason' => $this->reason,
+            'date' => $this->date
         ];
     }
 }

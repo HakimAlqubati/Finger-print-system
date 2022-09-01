@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\VacationTypeResource;
 use App\Models\VacationType;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class VacationTypeController extends Controller
      */
     public function index()
     {
-        //
+        $vacationTypes= VacationType::get();
+        return VacationTypeResource::collection($vacationTypes);
     }
 
     /**

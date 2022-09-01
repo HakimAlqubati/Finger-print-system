@@ -40,15 +40,9 @@ $add = is_null($dataTypeContent->getKey());
 
                         <div class="panel-body">
 
-
-                            @if ($edit)
-                                <input type="hidden" name="emp_id" value="{{ $edit ? $dataTypeContent->emp_id : '' }}">
-                            @endif
-
-
                             <div class="row"
                                 style="border: 1px solid #4276a4;  border-radius: 20px; padding-bottom: 20px;">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label for="validationCustom01">
                                         اسم الموظف
                                     </label>
@@ -56,88 +50,26 @@ $add = is_null($dataTypeContent->getKey());
                                         value="{{ $edit ? $dataTypeContent->user->name : '' }}" readonly />
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label for="validationCustom01">
-                                        الرقم الوظيفي
+                                        التاريخ
                                     </label>
-                                    <input type="text" id="name" class="form-control" id="validationCustom01"
-                                        value="{{ $edit ? $dataTypeContent->user->job_number : '' }}" readonly />
+                                    <input type="text" id="date" class="form-control" id="validationCustom01"
+                                        value="{{ $edit ? $dataTypeContent->date : '' }}" readonly />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="validationCustom01">
+                                        المبلغ
+                                    </label>
+                                    <input type="text" id="amount" class="form-control" id="validationCustom01"
+                                        value="{{ $edit ? $dataTypeContent->amount : '' }}" readonly />
                                 </div>
 
 
-
-
-
-                            </div>
-
-                            <div class="row"
-                                style="margin-top: 20px;border: 1px solid #4276a4;  border-radius: 20px; padding-bottom: 20px; ">
-
-
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label for="validationCustom01">
-                                        تاريخ الإجازة
-                                    </label>
-                                    <input type="text" name="date" id="date" class="form-control"
-                                        id="validationCustom01" value="{{ $edit ? $dataTypeContent->date : '' }}"
-                                        readonly />
-                                </div>
-
-
-                                <div class="col-md-4">
-                                    <label for="validationCustom01">
-                                        نوع الإجازة
-                                    </label>
-
-                                    <input type="text" name="type" id="type" class="form-control"
-                                        id="validationCustom01"
-                                        value="{{ $edit ? $dataTypeContent->vacationType->name : '' }}" readonly />
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="validationCustom01">
-                                        عدد الأيام
-                                    </label>
-
-                                    <input type="text" name="no_of_days" id="no_of_days" class="form-control"
-                                        id="validationCustom01" value="{{ $edit ? $dataTypeContent->no_of_days : '' }}"
-                                        readonly />
-                                </div>
-
-
-                                <div class="col-md-8">
-                                    <label for="validationCustom01">
-                                        الفترات
-                                    </label>
-                                    @foreach ($dataTypeContent->period_ids_exploded as $item)
-                                        <p>{{ $item['period_name'] }}</p>
-                                    @endforeach
-                                </div>
-                                {{-- <div class="col-md-4">
-                                    <label for="validationCustom01">
-                                        من الساعة
-                                    </label>
-
-                                    <input type="time" name="from_time" id="from_time" class="form-control"
-                                        id="validationCustom01" value="{{ $edit ? $dataTypeContent->from_time : '' }}"
-                                        readonly />
-                                </div>
-
-
-                                <div class="col-md-4">
-                                    <label for="validationCustom01">
-                                        إلى الساعة
-                                    </label>
-
-                                    <input type="time" name="to_time" id="to_time" class="form-control"
-                                        id="validationCustom01" value="{{ $edit ? $dataTypeContent->to_time : '' }}"
-                                        readonly />
-                                </div> --}}
-
-
-                                <div class="col-md-4">
-                                    <label for="validationCustom01">
-                                        حالة الإجازة
+                                      حالة السلفة
                                     </label>
 
                                     <select name="status" id="status" class="form-control" id="validationCustom01">
@@ -159,52 +91,74 @@ $add = is_null($dataTypeContent->getKey());
 
                                 </div>
 
+
                             </div>
+
+
 
                             <div class="row" style="margin-top: 20px;border: 1px solid #4276a4;  border-radius: 20px;">
 
                                 <div class="col-md-12">
                                     <label for="validationCustom01">
-                                        سبب أخذ الإجازة
+                                      الغرض من السلفة
                                     </label>
-                                    <p class="vacation_reason" id="vacation_reason">
-                                        {{ $dataTypeContent->vacation_reason }}
+                                    <p class="reason" id="reason">
+                                        {{ $dataTypeContent->reason }}
                                     </p>
                                 </div>
                             </div>
 
 
-                            <div class="row"
-                                style="margin-top: 20px;border: 1px solid #4276a4; padding-top:20px;  border-radius: 20px;">
-
-                                <div class="col-md-12">
-                                    <label for="validationCustom01">
-                                        إرسال ملاحظات
-                                        <br>
-                                        (لإرسال ملاحظات للموظف اكتب هنا ثم اضغط على زر إرسال أسفل الفورم)
-                                    </label>
-                                    <textarea style="width: 100%" name="manager_notes" id="manager_notes" placeholder="...">{{ $edit ? $dataTypeContent->manager_notes : '' }}</textarea>
-                                </div>
-                            </div>
 
 
 
+
+                        </div><!-- panel-body -->
+
+                        <div class="panel-footer">
                         @section('submit-buttons')
-                            <button type="submit" class="btn btn-primary save">إرسال</button>
+                            <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
                         @stop
                         @yield('submit-buttons')
                     </div>
-
-
                 </form>
 
-
+                <iframe id="form_target" name="form_target" style="display:none"></iframe>
+                <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
+                    enctype="multipart/form-data" style="width:0;height:0;overflow:hidden">
+                    <input name="image" id="upload_file" type="file"
+                        onchange="$('#my_form').submit();this.value='';">
+                    <input type="hidden" name="type_slug" id="type_slug" value="{{ $dataType->slug }}">
+                    {{ csrf_field() }}
+                </form>
 
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade modal-danger" id="confirm_delete_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="voyager-warning"></i> {{ __('voyager::generic.are_you_sure') }}</h4>
+            </div>
+
+            <div class="modal-body">
+                <h4>{{ __('voyager::generic.are_you_sure_delete') }} '<span class="confirm_delete_name"></span>'</h4>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                    data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
+                <button type="button" class="btn btn-danger"
+                    id="confirm_delete">{{ __('voyager::generic.delete_confirm') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- End Delete File Modal -->
 @stop
 

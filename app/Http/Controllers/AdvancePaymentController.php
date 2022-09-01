@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\VacationResource;
-use App\Models\Vacation;
+use App\Http\Resources\AdvancePaymentResource;
+use App\Models\AdvancePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class VacationController extends Controller
+class AdvancePaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,23 +16,21 @@ class VacationController extends Controller
      */
     public function index(Request $request)
     {
-        $vacations = Vacation::where('emp_id', $request->user()->id);
+
+        $advancePayment = AdvancePayment::where('emp_id', $request->user()->id);
 
         if (isset($_GET['id']) && $_GET['id'] != null) {
-            $vacations->where('id', $_GET['id']);
+            $advancePayment->where('id', $_GET['id']);
         }
-
-        if (isset($_GET['type']) && $_GET['type'] != null) {
-            $vacations->where('type', $_GET['type']);
-        }
+ 
 
         if (isset($_GET['status']) && $_GET['status'] != null) {
-            $vacations->where('status', $_GET['status']);
+            $advancePayment->where('status', $_GET['status']);
         }
 
-        $vacations = $vacations->get();
+        $advancePayment = $advancePayment->get();
 
-        return VacationResource::collection($vacations);
+        return AdvancePaymentResource::collection($advancePayment);
     }
 
     /**
@@ -42,6 +40,7 @@ class VacationController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
@@ -53,28 +52,24 @@ class VacationController extends Controller
     public function store(Request $request)
     {
         return DB::transaction(function () use ($request) {
-            $vacation = Vacation::create([
+            $advancePayment = AdvancePayment::create([
                 'emp_id' => $request->user()->id,
                 'date' =>  date('Y-m-d',  strtotime($request->date)),
-                'type' => $request->type,
-                'vacation_reason' => $request->vacation_reason,
-                'status' => Vacation::STATUS_ORDERED,
-                'no_of_days' => $request->no_of_days,
-                'from_time' =>  date('H:i:s',  strtotime($request->from_time)),
-                'to_time' => date('H:i:s',  strtotime($request->to_time)),
-                'period_ids' => $request->period_ids
+                'reason' => $request->reason,
+                'amount' => $request->amount,
+                'status' => AdvancePayment::STATUS_ORDERED,
             ]);
-            return $vacation;
+            return $advancePayment;
         });
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Vacation  $vacation
+     * @param  \App\Models\AdvancePayment  $advancePayment
      * @return \Illuminate\Http\Response
      */
-    public function show(Vacation $vacation)
+    public function show(AdvancePayment $advancePayment)
     {
         //
     }
@@ -82,10 +77,10 @@ class VacationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Vacation  $vacation
+     * @param  \App\Models\AdvancePayment  $advancePayment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Vacation $vacation)
+    public function edit(AdvancePayment $advancePayment)
     {
         //
     }
@@ -94,10 +89,10 @@ class VacationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Vacation  $vacation
+     * @param  \App\Models\AdvancePayment  $advancePayment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vacation $vacation)
+    public function update(Request $request, AdvancePayment $advancePayment)
     {
         //
     }
@@ -105,10 +100,10 @@ class VacationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Vacation  $vacation
+     * @param  \App\Models\AdvancePayment  $advancePayment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Vacation $vacation)
+    public function destroy(AdvancePayment $advancePayment)
     {
         //
     }

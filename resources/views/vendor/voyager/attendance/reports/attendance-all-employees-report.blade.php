@@ -204,11 +204,13 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                                         {{ $item['date'] }}
                                     </td>
                                     <td>
-                                        {{ count($item['attendance']) > 0 ? $item['attendance'][$item['date']][0]->attendance_time : '' }}
+                                        {{ $item['attendance'][$item['date']][0]->attendance_time }}
+                                        {{-- {{ count($item['attendance']) > 0 ? $item['attendance'][$item['date']][0]->attendance_time : '' }} --}}
                                     </td>
 
                                     <td>
-                                        {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->attendance_time : '' }}
+                                        {{ $item['attendance'][$item['date']][1]->attendance_time }}
+                                        {{-- {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->attendance_time : '' }} --}}
                                     </td>
 
                                     <td>
@@ -218,13 +220,15 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
 
 
                                     <td>
-                                        {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->early_leaving : '' }}
+                                        {{ $item['attendance'][$item['date']][1]->early_leaving }}
+                                        {{-- {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->early_leaving : '' }} --}}
                                     </td>
 
 
 
                                     <td>
-                                        {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->early_leaving : '' }}
+                                        {{ $item['attendance'][$item['date']][1]->early_leaving }}
+                                        {{-- {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->early_leaving : '' }} --}}
                                     </td>
 
                                     <td>
@@ -250,25 +254,28 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
 
                                     </td>
                                     <td>
-                                        {{ count($item['attendance']) > 2 ? $item['attendance'][$item['date']][2]->attendance_time : '' }}
+                                        {{ isset($item['attendance'][$item['date']][2]) ? $item['attendance'][$item['date']][2]->attendance_time : '' }}
+                                        {{-- {{ count($item['attendance']) > 2 ? $item['attendance'][$item['date']][2]->attendance_time : '' }} --}}
                                     </td>
                                     <td>
-                                        {{ count($item['attendance']) > 3 ? $item['attendance'][$item['date']][3]->attendance_time : '' }}
+                                        {{ isset($item['attendance'][$item['date']][3]) ? $item['attendance'][$item['date']][3]->attendance_time : '' }}
+                                        {{-- {{ count($item['attendance']) > 3 ? $item['attendance'][$item['date']][3]->attendance_time : '' }} --}}
                                     </td>
                                     <td>
                                         {{ $item['second_period_hours_count'] }}
                                     </td>
                                     <td>
-                                        {{ count($item['attendance']) > 2 ? $item['attendance'][$item['date']][2]->delay_duration : '' }}
+                                        {{ isset($item['attendance'][$item['date']][2]) ? $item['attendance'][$item['date']][2]->delay_duration : '' }}
+                                        {{-- {{ count($item['attendance']) > 2 ? $item['attendance'][$item['date']][2]->delay_duration : '' }} --}}
                                     </td>
                                     <td>
-
-                                        {{ count($item['attendance']) > 3 ? $item['attendance'][$item['date']][3]->early_leaving : '' }}
+                                        {{ isset( $item['attendance'][$item['date']][3]) ? $item['attendance'][$item['date']][3]->early_leaving }}
+                                        {{-- {{ count($item['attendance']) > 3 ? $item['attendance'][$item['date']][3]->early_leaving : '' }} --}}
                                     </td>
                                     <td>
                                         @php
                                             $status = null;
-                                            if (count($item['attendance']) > 3) {
+                                            if (count($item['attendance'])) {
                                                 if ($item['attendance'][$item['date']][2]->status == 'present') {
                                                     $status = 'حاضر';
                                                 } elseif ($item['attendance'][$item['date']][2]->status == 'absent') {

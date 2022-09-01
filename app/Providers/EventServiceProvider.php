@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Vacation;
+use App\Observers\VacationObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +29,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Vacation::observe(VacationObserver::class);
     }
 }

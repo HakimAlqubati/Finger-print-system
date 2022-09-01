@@ -17,6 +17,7 @@ class Period extends Model
         'to_time',
         'company_id',
         'allowed_delay',
+        'order',
     ];
     public function workDays()
     {

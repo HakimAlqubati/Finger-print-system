@@ -53,21 +53,21 @@
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label> نوع الإجازة</label>
              <p>
-                 سنوية
+                 {{ $vacationData->vacationType->name }}
              </p>
          </div>
 
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label>التاريخ</label>
              <p>
-                 12/12/2020
+                 {{ $vacationData->date }}
              </p>
          </div>
 
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label>إسم الموظف</label>
              <p>
-                 عبدالحكيم القباطي
+                 {{ $vacationData->user->name }}
              </p>
          </div>
 
@@ -75,22 +75,28 @@
          <hr>
          <br> <br> <br>
 
-         <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
+         <div class="col-md-8 col-xs-8 col-sm-8" style="box-shadow: none;">
+             <label>الفترات</label>
+             @foreach ($vacationData->period_ids_exploded as $item)
+                 <p>{{ $item['period_name'] }}</p>
+             @endforeach
+         </div>
+         {{-- <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label> إلى الساعة</label>
              <p>
-                 --
+                 {{ $vacationData->from_time }}
              </p>
          </div>
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label> من الساعة</label>
              <p>
-                 --
+                 {{ $vacationData->from_time }}
              </p>
-         </div>
+         </div> --}}
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label>عدد أيام الإجازة</label>
              <p>
-                 ثلاثة أيام
+                 {{ $vacationData->no_of_days }}
              </p>
          </div>
 
@@ -99,7 +105,7 @@
          <div class="col-md-12 col-xs-12 col-sm-12" style="box-shadow: none;">
              <label> سبب أخذ الإجازة</label>
              <p>
-                 أنا مريض جداً وقدنا خلاص باموت
+                 {{ $vacationData->vacation_reason }}
              </p>
          </div>
          <hr>
@@ -108,21 +114,21 @@
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label> حالة الإجازة</label>
              <p>
-                 معتمدة
-             </p> 
+                 {{ $vacationData->status }}
+             </p>
          </div>
 
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label> المدير العام</label>
              <p>
-                 الاستاذ: حسان مارش
+                 الاستاذ:
              </p>
          </div>
 
          <div class="col-md-4 col-xs-4 col-sm-4" style="box-shadow: none;">
              <label> مدير الموارد البشرية</label>
              <p>
-                 ماجد الرياشي
+
              </p>
          </div>
 

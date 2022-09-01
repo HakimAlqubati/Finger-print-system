@@ -38,7 +38,7 @@ $add = is_null($dataTypeContent->getKey());
                         {{ csrf_field() }}
 
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="validationCustom01">
                                 الاسم
                             </label>
@@ -47,10 +47,10 @@ $add = is_null($dataTypeContent->getKey());
                                 value="{{ $edit ? \App\Models\Period::find($dataTypeContent->getKey())->name : '' }}" />
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
 
                             <label for="validationCustom01">
-                               نوع الفترة
+                                نوع الفترة
                             </label>
                             <select name="period_type" id="period_type" class="form-control" id="validationCustom01"
                                 required>
@@ -61,11 +61,26 @@ $add = is_null($dataTypeContent->getKey());
                                 <option value="evening"
                                     {{ $edit && \App\Models\Period::find($dataTypeContent->getKey())->period_type == 'evening' ? 'selected' : '' }}>
                                     مسائي</option>
+
+                                <option value="night"
+                                    {{ $edit && \App\Models\Period::find($dataTypeContent->getKey())->period_type == 'night' ? 'selected' : '' }}>
+                                    ليلية</option>
+                                <option value="other"
+                                    {{ $edit && \App\Models\Period::find($dataTypeContent->getKey())->period_type == 'other' ? 'selected' : '' }}>
+                                    غير ذلك</option>
                             </select>
                         </div>
 
+                        <div class="col-md-4">
+                            <label for="validationCustom01">
+                                ترتيب الفترة
+                            </label>
+                            <input name="order" placeholder="ترتيب الفترة" id="order" class="form-control"
+                                id="validationCustom01" required
+                                value="{{ $edit ? \App\Models\Period::find($dataTypeContent->getKey())->order : '' }}" />
+                        </div>
+
                         @if ($edit)
-                       
                             <input type="hidden" name="company_id"
                                 value={{ \App\Models\Period::find($dataTypeContent->getKey())->company_id }} />
                         @endif
@@ -78,7 +93,7 @@ $add = is_null($dataTypeContent->getKey());
 
                         <div class="col-md-4">
                             <label for="validationCustom01">
-                               من الساعة
+                                من الساعة
                             </label>
                             <input type="time" name="from_time" id="from_time" class="form-control"
                                 id="validationCustom01" required
@@ -87,7 +102,7 @@ $add = is_null($dataTypeContent->getKey());
 
                         <div class="col-md-4">
                             <label for="validationCustom01">
-                              إلى الساعة
+                                إلى الساعة
                             </label>
                             <input type="time" name="to_time" id="to_time" class="form-control" id="validationCustom01"
                                 required
@@ -95,10 +110,10 @@ $add = is_null($dataTypeContent->getKey());
                         </div>
                         <div class="col-md-4">
                             <label for="validationCustom01">
-                             الوقت المسموح للتأخير
+                                الوقت المسموح للتأخير
                             </label>
-                            <input type="time" name="allowed_delay" id="allowed_delay" class="form-control" id="validationCustom01"
-                                required
+                            <input type="time" name="allowed_delay" id="allowed_delay" class="form-control"
+                                id="validationCustom01" required
                                 value="{{ $edit ? $dataTypeContent->allowed_delay : '' }}" />
                         </div>
 
