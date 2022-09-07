@@ -29,7 +29,7 @@ $add = is_null($dataTypeContent->getKey());
                     <!-- form start -->
                     <form autocomplete="off" role="form" class="form-edit-add"
                         action="{{ $edit ? route('voyager.' . $dataType->slug . '.update', $dataTypeContent->getKey()) : route('voyager.' . $dataType->slug . '.store') }}"
-                        method="POST" enctype="multipart/form-data" >
+                        method="POST" enctype="multipart/form-data">
                         <input autocomplete="false" name="hidden" type="text" style="display:none;">
                         <!-- PUT Method if we are editing -->
                         @if ($edit)
@@ -72,7 +72,7 @@ $add = is_null($dataTypeContent->getKey());
                                     كلمة السر
                                 </label>
                                 <input type="password" name="password" id="password" class="form-control"
-                                    id="validationCustom01" {{ $add ? 'required' : '' }}  autocomplete="new-password" />
+                                    id="validationCustom01" {{ $add ? 'required' : '' }} autocomplete="new-password" />
                             </div>
 
 
@@ -218,7 +218,7 @@ $add = is_null($dataTypeContent->getKey());
                                         value="{{ $edit ? $dataTypeContent->licence_image : '' }}" />
                                 </div>
 
-                                
+
                                 <div class="col-md-4">
                                     <label for="validationCustom01">
                                         صورة الهوية
@@ -255,6 +255,8 @@ $add = is_null($dataTypeContent->getKey());
                                             id="no_fingerprint_tracking" id="validationCustom01"
                                             {{ $dataTypeContent->no_fingerprint_tracking == 1 ? 'checked' : '' }} />
                                     </div>
+
+                               
 
                                 </div>
                             @endif

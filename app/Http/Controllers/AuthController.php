@@ -16,6 +16,10 @@ class AuthController extends Controller
 {
 
 
+    public function allEmps(Request $request)
+    {
+        return User::where('role_id', 3)->get();
+    }
     public function login(Request $request)
     {
 
@@ -114,6 +118,9 @@ class AuthController extends Controller
             $user->device_token = $request->device_token;
         }
 
+
+       
+
         if (isset($request->bank_account_number) && $request->bank_account_number != null) {
             $user->bank_account_number = $request->bank_account_number;
         }
@@ -141,6 +148,4 @@ class AuthController extends Controller
                 $user;
         }
     }
-
-    
 }

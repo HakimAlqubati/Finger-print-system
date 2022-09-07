@@ -375,6 +375,7 @@ class UserController extends VoyagerBaseController
         }
 
 
+
         $user = User::find($id)->update(
             [
                 'name' => $request->name,
@@ -400,7 +401,6 @@ class UserController extends VoyagerBaseController
                 'no_attendance_tracking' => $no_attendance_tracking,
                 'no_fingerprint_tracking' => $no_fingerprint_tracking,
                 'job_number' => $request->job_number,
-
             ]
         );
 

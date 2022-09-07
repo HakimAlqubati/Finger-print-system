@@ -137,95 +137,122 @@ class AttendanceController extends VoyagerBaseController
 
         foreach ($employees as $key_emp => $value) {
 
-            if ($key_emp == 0) {
-                $emp_id = $value->id;
-                $emp_name = $value->name;
-                $attendanceResult = [];
-                foreach (Period::where('company_id', Auth::user()->company_id)->get() as   $per_val) {
-                    $attendance = Attendance::where('emp_id', $emp_id)
-                        ->where('period_id', $per_val->id)
-                        ->whereDate('attendance_time', '=', new DateTime(date('Y-m-d', strtotime($date))))
-                        ->where('company_id', Auth::user()->company_id)->get();
+            // if ($key_emp == 0) {
+            $emp_id = $value->id;
+            $emp_name = $value->name;
+            $attendanceResult = [];
+            foreach (Period::where('company_id', Auth::user()->company_id)->orderBy('order', 'ASC')->get() as   $per_val) {
+                $attendance = Attendance::where('emp_id', $emp_id)
+                    ->where('period_id', $per_val->id)
+                    ->whereDate('attendance_time', '=', new DateTime(date('Y-m-d', strtotime($date))))
+                    ->where('company_id', Auth::user()->company_id)->get();
 
 
-                    foreach ($attendance as $key => $value) {
-                        // $attendanceResult = [];
-                        $obj = new stdClass();
-                        $obj->id = $value->id;
-                        $obj->emp_id = $value->emp_id;
+                // $finalObject = new stdClass();
 
-                        $obj->attendance_date = date('d-m-Y', strtotime($value->attendance_time));
-                        $obj->attendance_time = date('H:i', strtotime($value->attendance_time));
-                        $obj->attendance_type = $value->attendance_type;
-                        $obj->work_day_id = $value->work_day_id;
-                        $obj->period_id = $value->period_id;
-                        $obj->status = $value->status;
-                        $obj->order = $per_val->order;
-                        $obj->zzzz = $value->period->from_time;
-                        $obj->period_name = $value->period->name;
+                $attendancesProcessing = [];
+                $attending_time = null;
+                $leaving_time = null;
+                $status = null;
+                foreach ($attendance as $key => $value) {
+                    $obj = new stdClass();
 
-                        $obj->delay_duration = $value->delay_time;
-                        $obj->early_leaving = $value->early_leaving;
+                    // $obj->id = $value->id;
+                    // $obj->emp_id = $value->emp_id;
+                    // $obj->attendance_date = date('d-m-Y', strtotime($value->attendance_time));
 
-                        $date = date('d-m-Y', strtotime($value->attendance_time));
-                        $attendanceResult[$obj->attendance_date][] = $obj;
+
+                    if ($value->attendance_type == 'attending') {
+                        // $obj->attending_time = date('H:i', strtotime($value->attendance_time));
+                        $attending_time = date('H:i', strtotime($value->attendance_time));
+                        $status = $value->status;
+                    } else if ($value->attendance_type == 'leaving') {
+                        // $obj->leaving_time = date('H:i', strtotime($value->attendance_time));
+                        $leaving_time = date('H:i', strtotime($value->attendance_time));
                     }
+
+                    // $obj->delay_duration = $value->delay_time;
+                    // $obj->early_leaving = $value->early_leaving;
+
+                    // $obj->attendance_type = $value->attendance_type;
+                    // $obj->work_day_id = $value->work_day_id;
+                    // $obj->period_id = $value->period_id;
+                    // $obj->status = $value->status;
+                    // $obj->order = $per_val->order;
+                    // $obj->period_name = $value->period->name;
+
+
+
+
+                    $attendancesProcessing = [
+
+                        'attending_time' => $attending_time,
+                        'leaving_time' => $leaving_time,
+                        'emp_id' => $value->emp_id,
+                        'period_name' => $value->period->name,
+                        'period_id' => $value->period_id,
+                        'order' => $per_val->order,
+                        'work_day_id' => $value->work_day_id,
+                        'delay_duration' => $value->delay_duration,
+                        'early_leaving' => $value->early_leaving,
+                        'status' => $status,
+                    ];
+                    $date = date('d-m-Y', strtotime($value->attendance_time));
+                    // $attendanceResult[$value->period_id][] = $obj;
+                    // $attendanceResult[$obj->attendance_date][] = $obj;
                 }
-
-
-
-                // if($key_emp == 6){
-                //     dd($attendanceResult);
-                // }
-
-
-                $firstPeriodHoursCOunt  = null;
-                $secondPeriodHoursCOunt = null;
-                if (count($attendanceResult)) {
-
-                    $time1 = null;
-                    $time2 = null;
-                    $time3 = null;
-                    $time4 = null;
-
-                    if (
-                        isset($attendanceResult[$date][0]) && isset($attendanceResult[$date][1])
-                        && ($attendanceResult[$date][0]->attendance_type != 'on_vocation' || $attendanceResult[$date][0]->attendance_type != 'absent')
-                    ) {
-                        $time1 = new DateTime($attendanceResult[$date][0]->attendance_time);
-                        $time2 = new DateTime($attendanceResult[$date][1]->attendance_time);
-                        $interval = $time1->diff($time2);
-                        $firstPeriodHoursCOunt =  date('H:i:s', strtotime($interval->h . ':' . $interval->i));
-                    }
-
-
-                    if (isset($attendanceResult[$date][2]) && isset($attendanceResult[$date][3])) {
-                        $time3 = new DateTime($attendanceResult[$date][2]->attendance_time);
-                        $time4 = new DateTime($attendanceResult[$date][3]->attendance_time);
-                        $interva2 = $time3->diff($time4);
-                        $secondPeriodHoursCOunt =  date('H:i:s', strtotime($interval->h . ':' . $interval->i));
-                    }
-                }
-
-
-                $result[] = [
-                    'key' => $key_emp,
-                    'emp_id' => $emp_id,
-                    'emp_name' => $emp_name,
-                    'date' => $date,
-                    'day' => date('l', strtotime($date)),
-                    'attendance' =>  $attendanceResult,
-                    'countAttendance' =>  count($attendanceResult),
-                    'first_period_hours_count' => $firstPeriodHoursCOunt,
-                    'second_period_hours_count' => $secondPeriodHoursCOunt,
-
-                ];
-
-                $attendanceResult = null;
-                $firstPeriodHoursCOunt = null;
-                $secondPeriodHoursCOunt = null;
+                $attendanceResult[$per_val->id][] = $attendancesProcessing;
             }
+
+
+
+            // dd($attendanceResult);
+            // if($key_emp == 6){
+            //     dd($attendanceResult);
+            // }
+
+
+            $firstPeriodHoursCOunt  = null;
+            $secondPeriodHoursCOunt = null;
+            // if (count($attendanceResult)) {
+            //     $time1 = null;
+            //     $time2 = null;
+            //     $time3 = null;
+            //     $time4 = null;
+            //     if (
+            //         isset($attendanceResult[$date][0]) && isset($attendanceResult[$date][1])
+            //         && ($attendanceResult[$date][0]->attendance_type != 'on_vocation' || $attendanceResult[$date][0]->attendance_type != 'absent')
+            //     ) {
+            //         $time1 = new DateTime($attendanceResult[$date][0]->attendance_time);
+            //         $time2 = new DateTime($attendanceResult[$date][1]->attendance_time);
+            //         $interval = $time1->diff($time2);
+            //         $firstPeriodHoursCOunt =  date('H:i:s', strtotime($interval->h . ':' . $interval->i));
+            //     }
+
+
+            //     if (isset($attendanceResult[$date][2]) && isset($attendanceResult[$date][3])) {
+            //         $time3 = new DateTime($attendanceResult[$date][2]->attendance_time);
+            //         $time4 = new DateTime($attendanceResult[$date][3]->attendance_time);
+            //         $interva2 = $time3->diff($time4);
+            //         $secondPeriodHoursCOunt =  date('H:i:s', strtotime($interval->h . ':' . $interval->i));
+            //     }
+            // }
+
+
+            $result[] = [
+                'key' => $key_emp,
+                'emp_id' => $emp_id,
+                'emp_name' => $emp_name,
+                'date' => $date,
+                'day' => date('l', strtotime($date)),
+                'attendance' =>  $attendanceResult,
+            ];
+
+            $attendanceResult = null;
+            $firstPeriodHoursCOunt = null;
+            $secondPeriodHoursCOunt = null;
         }
+        // }
         // dd($result);
         return view(
             'voyager::attendance.reports.attendance-all-employees-report',

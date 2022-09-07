@@ -4,6 +4,7 @@ use App\Http\Controllers\AdvancePaymentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceSettingController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\NotificationControler;
 use App\Http\Controllers\VacationController;
 use App\Http\Controllers\VacationTypeController;
@@ -150,6 +151,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
     return $request->user();
 });
+
+
+Route::get('/all-emps', [AuthController::class, 'allEmps']);
+
+Route::resource('device', DeviceController::class);
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/work-days', [WorkDayPeriodController::class, 'index']);
 

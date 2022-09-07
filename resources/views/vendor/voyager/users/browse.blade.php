@@ -109,6 +109,7 @@
                                                 @endif
                                             </th>
                                         @endforeach
+                                    
                                         <th class="actions text-right dt-not-orderable">
                                             {{ __('voyager::generic.actions') }}</th>
                                     </tr>
@@ -282,6 +283,7 @@
                                                         @endif
                                                     </td>
                                                 @endforeach
+                                             
                                                 <td class="no-sort no-click bread-actions">
                                                     @foreach ($actions as $action)
                                                         @if (!method_exists($action, 'massAction'))
@@ -364,16 +366,16 @@
         $(document).ready(function() {
             @if (!$dataType->server_side)
                 var table = $('#dataTable').DataTable({!! json_encode(
-    array_merge(
-        [
-            'order' => $orderColumn,
-            'language' => __('voyager::datatable'),
-            'columnDefs' => [['targets' => 'dt-not-orderable', 'searchable' => false, 'orderable' => false]],
-        ],
-        config('voyager.dashboard.data_tables', []),
-    ),
-    true,
-) !!});
+                    array_merge(
+                        [
+                            'order' => $orderColumn,
+                            'language' => __('voyager::datatable'),
+                            'columnDefs' => [['targets' => 'dt-not-orderable', 'searchable' => false, 'orderable' => false]],
+                        ],
+                        config('voyager.dashboard.data_tables', []),
+                    ),
+                    true,
+                ) !!});
             @else
                 $('#search-input select').select2({
                     minimumResultsForSearch: Infinity

@@ -76,7 +76,8 @@
                      <li>
                          {{-- {{ $companyData->address_arabic }} --}}
                          <p>
-                             نظام بصمة حقائب المسافر
+                             نظام بصمة
+                             {{ $companyData->name }}
                          </p>
                      </li>
                      <li>
@@ -93,7 +94,7 @@
                      <li>
                          {{-- {{ $companyData->address_english }} --}}
                          <p>
-                             Hakaeeb Almosafer Finger print
+                            {{ $companyData->english_name }}  Finger print
                          </p>
                      </li>
                      <li>

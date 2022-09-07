@@ -141,12 +141,12 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                                 <th colspan="4">
 
                                 </th>
-                                <th colspan="6" style="text-align: center;">
-                                    فترة صباحية
-                                </th>
-                                <th colspan="6" style="text-align: center;">
-                                    فترة مسائية
-                                </th>
+                                @foreach (\App\Models\Period::where('company_id', Auth::user()->company_id)->orderBy('order', 'ASC')->get() as $item)
+                                    <th colspan="6" style="text-align: center;">
+                                        {{ $item->name }}
+                                    </th>
+                                @endforeach
+
 
                             </tr>
 
@@ -156,22 +156,17 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                                 <th>اليوم</th>
                                 <th>التاريخ</th>
 
-                                <th>حضور</th>
-                                <th>انصراف</th>
-                                <th>ساعات العمل</th>
-                                <th>تأخير</th>
-                                <th>خروج مبكر</th>
-                                <th>الحالة</th>
+                                @foreach (\App\Models\Period::where('company_id', Auth::user()->company_id)->orderBy('order', 'ASC')->get() as $item)
+                                    <th>حضور</th>
+                                    <th>انصراف</th>
+                                    <th>ساعات العمل</th>
+                                    <th>تأخير</th>
+                                    <th>خروج مبكر</th>
+                                    <th>الحالة</th>
+                                @endforeach
 
-                                <th>حضور</th>
-                                <th>انصراف</th>
-                                <th>ساعات العمل</th>
-                                <th>تأخير</th>
-                                <th>خروج مبكر</th>
-                                <th>الحالة</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach ($result as $item)
                                 <tr>
@@ -203,123 +198,98 @@ $branch = \App\Models\Branch::find(Auth::user()->company_id);
                                     <td>
                                         {{ $item['date'] }}
                                     </td>
-                                    <td>
-                                        {{ $item['attendance'][$item['date']][0]->attendance_time }}
-                                        {{-- {{ count($item['attendance']) > 0 ? $item['attendance'][$item['date']][0]->attendance_time : '' }} --}}
-                                    </td>
 
-                                    <td>
-                                        {{ $item['attendance'][$item['date']][1]->attendance_time }}
-                                        {{-- {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->attendance_time : '' }} --}}
-                                    </td>
-
-                                    <td>
-                                        {{ $item['second_period_hours_count'] }}
-                                    </td>
+                                    @foreach (\App\Models\Period::where('company_id', Auth::user()->company_id)->orderBy('order', 'ASC')->get() as $k => $periodItem)
+                                        <td>
+                                            {{-- {{ $item['attendance'][$item['date']][$k]->attendance_time }} --}}
 
 
 
-                                    <td>
-                                        {{ $item['attendance'][$item['date']][1]->early_leaving }}
-                                        {{-- {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->early_leaving : '' }} --}}
-                                    </td>
 
+                                            {{ $item['attendance'][$periodItem->id][0]['attending_time'] }}
+                                        </td>
 
+                                        <td>
+                                            {{ $item['attendance'][$periodItem->id][0]['leaving_time'] }}
+                                        </td>
 
-                                    <td>
-                                        {{ $item['attendance'][$item['date']][1]->early_leaving }}
-                                        {{-- {{ count($item['attendance']) > 1 ? $item['attendance'][$item['date']][1]->early_leaving : '' }} --}}
-                                    </td>
+                                        <td>
 
-                                    <td>
-                                        @php
-                                            $status = null;
-                                            if (count($item['attendance']) > 0) {
-                                                if ($item['attendance'][$item['date']][0]->status == 'present') {
-                                                    $status = 'حاضر';
-                                                } elseif ($item['attendance'][$item['date']][0]->status == 'absent') {
-                                                    $status = 'غائب';
-                                                } elseif ($item['attendance'][$item['date']][0]->status == 'on_vocation') {
-                                                    $status = 'في إجازة';
-                                                } elseif ($item['attendance'][$item['date']][0]->status == 'late') {
-                                                    $status = 'متأخر';
-                                                } elseif ($item['attendance'][$item['date']][0]->status == 'early') {
-                                                    $status = 'مبكر';
+                                            @php
+                                                
+                                                $time1 = new DateTime($item['attendance'][$periodItem->id][0]['attending_time']);
+                                                $time2 = new DateTime($item['attendance'][$periodItem->id][0]['leaving_time']);
+                                                $interval = $time1->diff($time2);
+                                                $firstPeriodHoursCOunt = date('H:i:s', strtotime($interval->h . ':' . $interval->i));
+                                                echo $firstPeriodHoursCOunt;
+                                            @endphp
+                                        </td>
+
+                                        <td>
+
+                                        </td>
+
+                                        <td>
+                                            {{ $item['attendance'][$periodItem->id][0]['early_leaving'] }}
+
+                                        </td>
+
+                                        <td>
+
+                                            @php
+                                                $status = null;
+                                                if (count($item['attendance']) > 0) {
+                                                    if ($item['attendance'][$periodItem->id][0]['status'] == 'present') {
+                                                        $status = 'حاضر';
+                                                    } elseif ($item['attendance'][$periodItem->id][0]['status'] == 'absent') {
+                                                        $status = 'غائب';
+                                                    } elseif ($item['attendance'][$periodItem->id][0]['status'] == 'on_vocation') {
+                                                        $status = 'في إجازة';
+                                                    } elseif ($item['attendance'][$periodItem->id][0]['status'] == 'late') {
+                                                        $status = 'متأخر';
+                                                    } elseif ($item['attendance'][$periodItem->id][0]['status'] == 'early') {
+                                                        $status = 'مبكر';
+                                                    }
+                                                    echo $status;
+                                                } else {
+                                                    echo 'غائب';
                                                 }
-                                                echo $status;
-                                            } else {
-                                                echo 'غائب';
-                                            }
-                                        @endphp
+                                                // echo $status;
+                                            @endphp
 
-                                    </td>
-                                    <td>
-                                        {{ isset($item['attendance'][$item['date']][2]) ? $item['attendance'][$item['date']][2]->attendance_time : '' }}
-                                        {{-- {{ count($item['attendance']) > 2 ? $item['attendance'][$item['date']][2]->attendance_time : '' }} --}}
-                                    </td>
-                                    <td>
-                                        {{ isset($item['attendance'][$item['date']][3]) ? $item['attendance'][$item['date']][3]->attendance_time : '' }}
-                                        {{-- {{ count($item['attendance']) > 3 ? $item['attendance'][$item['date']][3]->attendance_time : '' }} --}}
-                                    </td>
-                                    <td>
-                                        {{ $item['second_period_hours_count'] }}
-                                    </td>
-                                    <td>
-                                        {{ isset($item['attendance'][$item['date']][2]) ? $item['attendance'][$item['date']][2]->delay_duration : '' }}
-                                        {{-- {{ count($item['attendance']) > 2 ? $item['attendance'][$item['date']][2]->delay_duration : '' }} --}}
-                                    </td>
-                                    <td>
-                                        {{ isset( $item['attendance'][$item['date']][3]) ? $item['attendance'][$item['date']][3]->early_leaving }}
-                                        {{-- {{ count($item['attendance']) > 3 ? $item['attendance'][$item['date']][3]->early_leaving : '' }} --}}
-                                    </td>
-                                    <td>
-                                        @php
-                                            $status = null;
-                                            if (count($item['attendance'])) {
-                                                if ($item['attendance'][$item['date']][2]->status == 'present') {
-                                                    $status = 'حاضر';
-                                                } elseif ($item['attendance'][$item['date']][2]->status == 'absent') {
-                                                    $status = 'غائب';
-                                                } elseif ($item['attendance'][$item['date']][2]->status == 'on_vocation') {
-                                                    $status = 'في إجازة';
-                                                } elseif ($item['attendance'][$item['date']][2]->status == 'late') {
-                                                    $status = 'متأخر';
-                                                } elseif ($item['attendance'][$item['date']][2]->status == 'early') {
-                                                    $status = 'مبكر';
-                                                }
-                                                echo $status;
-                                            } else {
-                                                echo 'غائب';
-                                            }
-                                        @endphp
-                                    </td>
+                                        </td>
+                                        {{-- @break --}}
+                                    @endforeach
+
 
 
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            @break
+                        @endforeach
+                    </tbody>
 
-                </div>
-
+                </table>
 
             </div>
+
+
         </div>
     </div>
+</div>
 
 @stop
 
 @section('javascript')
-    <script>
-        var params = {};
-        var $file;
+<script>
+    var params = {};
+    var $file;
 
 
 
-        $('document').ready(function() {
-            $('.toggleswitch').bootstrapToggle();
+    $('document').ready(function() {
+        $('.toggleswitch').bootstrapToggle();
 
 
-        });
-    </script>
+    });
+</script>
 @stop

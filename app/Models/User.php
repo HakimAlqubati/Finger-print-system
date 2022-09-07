@@ -44,7 +44,7 @@ class User extends \TCG\Voyager\Models\User
         'no_attendance_tracking',
         'active',
         'no_fingerprint_tracking',
-        'job_number'
+        'job_number', 
     ];
 
     /**
